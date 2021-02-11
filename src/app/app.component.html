@@ -1,5 +1,19 @@
 <header class="header">Angular Reactive Forms</header>
-<form [formGroup]="nameGroup">
+
+<input class="name" [formControl]="nameControl">
+
+<fieldset [formGroup]="nameGroup">
   <input class="name" formControlName="firstName">
   <input class="name" formControlName="lastName">
+</fieldset>
+
+<form [formGroup]="userListGroup">
+  <ul formArrayName="users">
+    <li *ngFor="let user of userListGroup.controls.users.value; let idx = index">
+      <input formControlName="{{idx}}">
+      <button (click)="removeUser(idx)">Remove</button>
+    </li>
+  </ul>
+
 </form>
+<button (click)="addUser()">Add</button>

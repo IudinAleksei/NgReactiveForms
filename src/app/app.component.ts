@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 
 @Component({
@@ -7,21 +7,23 @@ import { Observable, of } from 'rxjs';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+
 export class AppComponent implements OnInit {
   title = 'NgReactiveForms';
   nameControl: FormControl;
   nameGroup: FormGroup;
+  userListGroup: FormGroup;
 
   ngOnInit(): void {
-    this.nameControl = new FormControl('Hello', [myValidator(4)], [myAsyncValidator]);
+    this.nameControl = new FormControl('John', [myValidator(4)], [myAsyncValidator]);
     // this.nameControl.valueChanges.subscribe((val) => console.log(val));
-    this.nameControl.statusChanges.subscribe((val) => {
-      console.log(this.nameControl.errors);
-      console.log(val);
-    });
+    // this.nameControl.statusChanges.subscribe((val) => {
+    //   console.log(this.nameControl.errors);
+    //   console.log(val);
+    // });
 
     this.nameGroup = new FormGroup({
-      firstName: new FormControl('John'),
+      firstName: new FormControl('Sam'),
       lastName: new FormControl('Jonsson')
     });
 
@@ -30,6 +32,24 @@ export class AppComponent implements OnInit {
     //   console.log(this.nameControl.errors);
     //   console.log(val);
     // })
+
+    this.userListGroup = new FormGroup({
+      users: new FormArray([
+        new FormControl('Alice'),
+        new FormControl('Tom'),
+        new FormControl('Bob')
+      ])
+    });
+    //
+    // console.log(this.userListGroup.controls.users);
+  }
+
+  removeUser(index: number) {
+    (this.userListGroup.controls['users'] as FormArray).removeAt(index);
+  }
+
+  addUser() {
+    (this.userListGroup.controls['users'] as FormArray).push(new FormControl(''));
   }
 }
 
